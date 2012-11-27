@@ -1,0 +1,5 @@
+# cat=basic/enable; type=string; label=URL to MaxMind Country DB:The URL to MaxMinds GeoIP DB that will be fetched.
+geoipCountryUrl = http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+
+# cat=basic/enable; type=string; label=Local geoIP database: The file where the GeoIP DB is located locally 
+geoipCountryFile = uploads/tx_country2language/geoip.dat
