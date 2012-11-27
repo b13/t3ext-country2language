@@ -55,12 +55,12 @@ class tx_country2language_detect {
 	 */
 	public function setLanguageFromCountry($params, &$pObj) {
 		$language = t3lib_div::_GP('L');
+		$countryCode = strtolower($pObj->clientInfo['COUNTRY_CODE']);
 
 		// make sure to only load this info on the first page hit
 		if ($language == NULL) {
 			$TSConf = $pObj->getPagesTSconfig();
 			$conf = $TSConf['tx_country2language.'];
-			$countryCode = strtolower($pObj->clientInfo['COUNTRY_CODE']);
 			if ($countryCode && $conf['enable'] == 1) {
 
 					// redirect when nothing was set, make sure the language is set on this URL
@@ -68,13 +68,22 @@ class tx_country2language_detect {
 					t3lib_Utility_Http::redirect($conf['defaultRedirect.'][$countryCode]);
 				}
 
-				
+					// set the Get Variables for this country
 				if (isset($conf['mapping.'][$countryCode . '.'])) {
 					foreach ($conf['mapping.'][$countryCode . '.'] as $getVariable => $getValue) {
 						t3lib_div::_GETset($getValue, $getVariable);
 					}
+				} else if ($conf['mapping.']['default.']) {
+						// check if there are default parameters for this country
+					foreach ($conf['mapping.']['default.'] as $getVariable => $getValue) {
+						t3lib_div::_GETset($getValue, $getVariable);
+					}
 				}
-
+			}
+				// set the country parameter as GET variable
+			if ($countryCode && !empty($conf['countryCodeGetVariable'])) {
+				// set the GET parameter "country" to the current country
+				t3lib_div::_GETset($pObj->clientInfo['COUNTRY_CODE'], $conf['countryCodeGetVariable']);
 			}
 		}
 	}
