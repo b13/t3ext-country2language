@@ -1,28 +1,39 @@
-t3ext-country2language
-======================
+# TYPO3 Extension: Country-To-Language GEO Mapping (country2language)
+The extension allows to take the free GeoIP database, which can be automatically updated by a Scheduler task, downloaded and unzipped from MaxMind. Then, on a per-pagetree-basis, one can enable the language detection in the PageTSconfig section on the root page of a pagetree.
 
-TYPO3 Extension: Country-To-Language GEO Mapping
+## PageTSconfig options
+
+Please note that the following options are only used when there is no language parameter given in the URL.
 
 
-Possible PagesTSconfig
-======================
+### Activate the country2language mappings
 
-# Activate the country2language mappings
-tx_country2language.enable = 1
-# map "DE" to the GET variable &C=DE when the country is detected
-tx_country2language.countryCodeGetVariable = C
-tx_country2language.mapping {
-	# Country Website Australia
-	# Set the Language parameter to 45
-	au.L = 45
-	au.no_cache = 1
+You can enable the language-detection based on the country with the following option
 
-	# Country Website Germany
-	# Set the Language parameter to 12
-	de.L = 12
+	tx_country2language.enable = 1
 
-	# when no other mapping fits, then set the default values
-	# default language is not "0", but "20" in this case
-	default.L = 20
-	default.renderInPink = 1
-}
+
+### Set language-parameter based on the country
+
+Set &L=45 and &no_cache=1 when the visitor is from Australia
+
+	tx_country2language.mapping {
+		au.L = 45
+		au.no_cache = 1
+	}
+
+
+### Default GET parameters when no country options are set
+
+When no other mapping fits, then set the default values default language is not "0", but "20" in this case.
+
+	tx_country2language.mapping {
+		default.L = 20
+		default.renderInPink = 1
+	}
+
+### Map the country code
+
+Map the detected country code to the GET variable "C", which means that users from Germany will have &C=DE in their URL.
+
+	tx_country2language.countryCodeGetVariable = C
