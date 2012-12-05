@@ -1,4 +1,5 @@
 # TYPO3 Extension: Country-To-Language GEO Mapping (country2language)
+
 The extension allows to take the free GeoIP database, which can be automatically updated by a Scheduler task, downloaded and unzipped from MaxMind. Then, on a per-pagetree-basis, one can enable the language detection in the PageTSconfig section on the root page of a pagetree.
 
 ## PageTSconfig options
@@ -32,7 +33,31 @@ When no other mapping fits, then set the default values default language is not 
 		default.renderInPink = 1
 	}
 
-### Map the country code
+### different languages based on browser languages
+
+	tx_country2language.mapping {
+		# in canada, english is default
+		ca.L = 4
+		# canadians with a french browser should go canadian french
+		fr-ca.L = 3
+	}
+
+
+### Default redirects in countries
+
+Redirect to this URL when no language is set and coming from this country.
+
+	tx_country2language.defaultRedirect {
+		fr = /fr-FR/
+		en = /en-INT/
+		de = /de-DE/
+		ca = /en-CA/
+		fr-ca = /fr-CA/
+		uk = /en-UK/
+	}
+
+
+### Map the country code to a GET variable
 
 Map the detected country code to the GET variable "C", which means that users from Germany will have &C=DE in their URL.
 

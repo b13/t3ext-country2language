@@ -63,13 +63,32 @@ class tx_country2language_detect {
 			$conf = $TSConf['tx_country2language.'];
 			if ($countryCode && $conf['enable'] == 1) {
 
+
+					// try to get the preferred browser language
+				$preferredBrowserLanguage = $pObj->csConvObj->getPreferredClientLanguage(t3lib_div::getIndpEnv('HTTP_ACCEPT_LANGUAGE'));
+				if (!$preferredBrowserLanguage || $preferredBrowserLanguage == 'default') {
+					$preferredBrowserLanguage = 'en';
+				}
+				
+				$languageAndCountryCodeCombination = $preferredBrowserLanguage . '-' . $countryCode;
+
 					// redirect when nothing was set, make sure the language is set on this URL
-				if (isset($conf['defaultRedirect.'][$countryCode])) {
+				if (isset($conf['defaultRedirect.'][$languageAndCountryCodeCombination])) {
+					t3lib_Utility_Http::redirect($conf['defaultRedirect.'][$languageAndCountryCodeCombination]);
+				} else if (isset($conf['defaultRedirect.'][$countryCode])) {
 					t3lib_Utility_Http::redirect($conf['defaultRedirect.'][$countryCode]);
 				}
 
-					// set the Get Variables for this country
-				if (isset($conf['mapping.'][$countryCode . '.'])) {
+
+
+					// set the Get Variables for this country (and preferred browser language)
+				if (isset($conf['mapping.'][$languageAndCountryCodeCombination . '.'])) {
+					foreach ($conf['mapping.'][$languageAndCountryCodeCombination . '.'] as $getVariable => $getValue) {
+						t3lib_div::_GETset($getValue, $getVariable);
+					}
+
+					// set the Get Variables for this country (no browser detection condition found)
+				} else if (isset($conf['mapping.'][$countryCode . '.'])) {
 					foreach ($conf['mapping.'][$countryCode . '.'] as $getVariable => $getValue) {
 						t3lib_div::_GETset($getValue, $getVariable);
 					}
