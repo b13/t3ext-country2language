@@ -62,3 +62,9 @@ Redirect to this URL when no language is set and coming from this country.
 Map the detected country code to the GET variable "C", which means that users from Germany will have &C=DE in their URL.
 
 	tx_country2language.countryCodeGetVariable = C
+
+### Set a default country code, if the IP couldn't be found
+
+Sometimes, it is necessary to set the default country code, if the GeoIP detection has failed.
+
+	tx_country2language.defaultCountryCode = UK

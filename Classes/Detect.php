@@ -61,8 +61,14 @@ class tx_country2language_detect {
 		if ($language == NULL) {
 			$TSConf = $pObj->getPagesTSconfig();
 			$conf = $TSConf['tx_country2language.'];
-			if ($countryCode && $conf['enable'] == 1) {
 
+			// see if the IP GEO coding was found, if not, take a default one
+			// then it can be set to "UK" by default for instance
+			if (empty($countryCode) && !empty($conf['defaultCountryCode'])) {
+				$countryCode = $conf['defaultCountryCode']; 
+			}
+
+			if ($countryCode && $conf['enable'] == 1) {
 
 					// try to get the preferred browser language
 				$preferredBrowserLanguage = $pObj->csConvObj->getPreferredClientLanguage(t3lib_div::getIndpEnv('HTTP_ACCEPT_LANGUAGE'));
